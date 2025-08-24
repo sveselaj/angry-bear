@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Posts Monitor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #1877f2; /* Facebook blue */
+        }
+        .post {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .post-message {
+            font-size: 16px;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+        .post-meta {
+            color: #65676b;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .post-actions {
+            margin-top: 10px;
+        }
+        .btn {
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+        }
+        .btn:hover {
+            background-color: #166fe5;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #65676b;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Facebook Posts Monitor</h1>
+        <p>Tracking posts from your Facebook Page</p>
+    </div>
+
+    {% if posts %}
+        {% for post in posts %}
+            <div class="post">
+                <div class="post-message">{{ post.message }}</div>
+                <div class="post-meta">
+                    <span>{{ post.created_time.strftime('%Y-%m-%d %H:%M') }}</span>
+                    <span>{{ post.comments|length }} comments</span>
+                </div>
+                <div class="post-actions">
+                    <a href="/post/{{ post.post_id }}" class="btn">View Details</a>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="empty-state">
+            <h2>No posts found</h2>
+            <p>Fetch some posts using the fetch_posts.py script first.</p>
+        </div>
+    {% endif %}
+</body>
+</html>
