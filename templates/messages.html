@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page Messages</title>
+    <style>
+        .conversation { border: 1px solid #ddd; padding: 15px; margin: 10px 0; }
+        .message { background: #f9f9f9; padding: 10px; margin: 5px 0; }
+        .user-message { background: #e3f2fd; }
+        .page-message { background: #f5f5f5; }
+    </style>
+</head>
+<body>
+    <h1>Page Conversations</h1>
+    {% for conversation in conversations %}
+        <div class="conversation">
+            <h3><a href="{{ url_for('conversation_detail', conversation_id=conversation.conversation_id) }}">
+                Conversation {{ conversation.conversation_id }}
+            </a></h3>
+            <p>Last updated: {{ conversation.updated_time }}</p>
+            <p>Messages: {{ conversation.message_count }}</p>
+            <p>Snippet: {{ conversation.snippet }}</p>
+        </div>
+    {% endfor %}
+</body>
+</html>

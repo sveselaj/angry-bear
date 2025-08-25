@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine
-from models import Base, Post, Comment
+from models import Base, Post, Comment, Conversation, Message
 import os
 from dotenv import load_dotenv
 
