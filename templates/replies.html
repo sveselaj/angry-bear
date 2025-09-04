@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}AI Replies - Facebook Analytics{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">AI-Generated Replies</h4>
+                <div class="btn-group">
+                    <a href="{{ url_for('replies') }}" class="btn btn-sm btn-outline-secondary {% if filter_type == 'all' %}active{% endif %}">
+                        All Replies
+                    </a>
+                    <a href="{{ url_for('replies') }}?filter=ai" class="btn btn-sm btn-outline-primary {% if filter_type == 'ai' %}active{% endif %}">
+                        AI Responses
+                    </a>
+                    <a href="{{ url_for('replies') }}?filter=facebook" class="btn btn-sm btn-outline-success {% if filter_type == 'facebook' %}active{% endif %}">
+                        Posted to FB
+                    </a>
+                    <a href="{{ url_for('replies') }}?filter=error" class="btn btn-sm btn-outline-danger {% if filter_type == 'error' %}active{% endif %}">
+                        Errors
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if replies %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Comment ID</th>
+                                <th>Reply</th>
+                                <th>Created</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for reply in replies %}
+                            <tr>
+                                <td class="text-muted" style="font-size: 0.8rem;">
+                                    {{ reply.comment_id[:15] }}...
+                                </td>
+                                <td>
+                                    <div class="response-preview">
+                                        {{ reply.message[:100] }}{% if reply.message|length > 100 %}...{% endif %}
+                                    </div>
+                                </td>
+                                <td>
+                                    <small class="text-muted">{{ reply.created_time.strftime('%Y-%m-%d %H:%M') }}</small>
+                                </td>
+                                <td>
+                                    {% if reply.posted_to_facebook %}
+                                    <span class="badge bg-success">Posted</span>
+                                    {% elif reply.post_error %}
+                                    <span class="badge bg-danger">Error</span>
+                                    {% else %}
+                                    <span class="badge bg-warning">Pending</span>
+                                    {% endif %}
+                                    {% if reply.ai_generated %}
+                                    <span class="badge bg-info">AI</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{{ url_for('comment_detail', comment_id=reply.comment_id) }}" class="btn btn-outline-primary">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        {% if not reply.posted_to_facebook %}
+                                        <a href="{{ url_for('post_reply', reply_id=reply.id) }}" class="btn btn-outline-success">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">No replies found</p>
+                    <a href="{{ url_for('auto_reply_settings') }}" class="btn btn-primary">
+                        <i class="fas fa-robot me-1"></i> Generate Replies
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

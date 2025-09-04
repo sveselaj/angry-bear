@@ -16,6 +16,7 @@ def main():
     
     print("=== Facebook API Debug ===")
     
+    
     # Verify credentials
     if not fb_api.verify_credentials():
         print("Credentials verification failed")

@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block title %}Comment Details - Facebook Analytics{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Comment Details</h4>
+                <a href="{{ url_for('comments') }}" class="btn btn-sm btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Back to Comments
+                </a>
+            </div>
+            <div class="card-body">
+                <!-- Comment Details -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Original Comment</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h6>{{ comment.user_name }}</h6>
+                                <p class="mb-1">{{ comment.message }}</p>
+                                <small class="text-muted">{{ comment.created_time.strftime('%Y-%m-%d %H:%M') }}</small>
+                            </div>
+                            <div>
+                                <span class="badge bg-{% if comment.sentiment_category == 'positive' %}success{% elif comment.sentiment_category == 'negative' %}danger{% else %}secondary{% endif %}">
+                                    {{ comment.sentiment_category|capitalize }}
+                                </span>
+                                {% if comment.sentiment_score %}
+                                <div class="text-muted small mt-1">
+                                    Score: {{ "%.2f"|format(comment.sentiment_score) }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Post Reference -->
+                        {% if comment.post_rel %}
+                        <div class="mt-3 pt-3 border-top">
+                            <small class="text-muted">From post:</small>
+                            <p class="mb-0">{{ comment.post_rel.message[:100] }}{% if comment.post_rel.message|length > 100 %}...{% endif %}</p>
+                            <a href="{{ url_for('post_analysis', post_id=comment.post_rel.post_id) }}" class="small">
+                                View Post Analysis
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Reply Form -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Reply to Comment</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="{{ url_for('reply_to_comment', comment_id=comment.comment_id) }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <div class="mb-3">
+                                <textarea class="form-control" name="message" rows="3" placeholder="Type your reply here..." required></textarea>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-paper-plane me-1"></i> Send Reply
+                                </button>
+                                <a href="{{ url_for('auto_reply_settings') }}" class="btn btn-outline-info btn-sm">
+                                    <i class="fas fa-robot me-1"></i> AI Reply Settings
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Replies List -->
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Replies</h5>
+                        <span class="badge bg-primary">{{ replies|length }} replies</span>
+                    </div>
+                    <div class="card-body">
+                        {% if replies %}
+                            <div class="list-group">
+                                {% for reply in replies %}
+                                    <div class="list-group-item">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div class="flex-grow-1">
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <h6 class="mb-0">{{ reply.user_name }}</h6>
+                                                    <div>
+                                                        {% if reply.ai_generated %}
+                                                            <span class="badge bg-info">AI Generated</span>
+                                                        {% endif %}
+                                                        {% if reply.posted_to_facebook %}
+                                                            <span class="badge bg-success">Posted</span>
+                                                        {% elif reply.post_error %}
+                                                            <span class="badge bg-danger">Error</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                                <p class="mb-1">{{ reply.message }}</p>
+                                                <small class="text-muted">{{ reply.created_time.strftime('%Y-%m-%d %H:%M') }}</small>
+                                            </div>
+                                            <div class="ms-3">
+                                                {% if not reply.posted_to_facebook and not reply.post_error %}
+                                                <form method="POST" action="{{ url_for('post_reply', reply_id=reply.id) }}" class="d-inline">
+                                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                                    <button type="submit" class="btn btn-sm btn-success" title="Post to Facebook">
+                                                        <i class="fas fa-paper-plane"></i>
+                                                    </button>
+                                                </form>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        {% if reply.post_error %}
+                                        <div class="alert alert-danger mt-2 mb-0 py-2">
+                                            <small><i class="fas fa-exclamation-triangle me-1"></i> {{ reply.post_error }}</small>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="text-center py-4">
+                                <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                                <p class="text-muted">No replies yet</p>
+                                <p class="text-muted small">Use the form above to send your first reply</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add confirmation for posting replies
+    const postReplyForms = document.querySelectorAll('form[action*="post_reply"]');
+    postReplyForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            if (!confirm('Are you sure you want to post this reply to Facebook?')) {
+                e.preventDefault();
+            }
+        });
+    });
+    
+    // Add auto-expand to textarea
+    const textarea = document.querySelector('textarea[name="message"]');
+    if (textarea) {
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+        
+        // Trigger initial resize
+        setTimeout(() => {
+            textarea.dispatchEvent(new Event('input'));
+        }, 100);
+    }
+});
+</script>
+{% endblock %}

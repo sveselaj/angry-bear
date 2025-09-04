@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% block title %}Comments - Facebook Analytics{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Comments Management</h5>
+            </div>
+            <div class="card-body">
+                <form method="get" action="{{ url_for('comments') }}" class="row g-3 mb-4">
+                    <div class="col-md-4">
+                        <label for="search" class="form-label">Search Comments</label>
+                        <input type="text" class="form-control" id="search" name="search" value="{{ search_query }}" placeholder="Enter keywords...">
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label for="sentiment" class="form-label">Filter by Sentiment</label>
+                        <select class="form-select" id="sentiment" name="sentiment">
+                            <option value="all" {% if sentiment_filter == 'all' %}selected{% endif %}>All Sentiments</option>
+                            <option value="positive" {% if sentiment_filter == 'positive' %}selected{% endif %}>Positive</option>
+                            <option value="neutral" {% if sentiment_filter == 'neutral' %}selected{% endif %}>Neutral</option>
+                            <option value="negative" {% if sentiment_filter == 'negative' %}selected{% endif %}>Negative</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label for="post" class="form-label">Filter by Post</label>
+                        <select class="form-select" id="post" name="post">
+                            <option value="all" {% if posts_filter == 'all' %}selected{% endif %}>All Posts</option>
+                            {% for post in all_posts %}
+                                <option value="{{ post.post_id }}" {% if posts_filter == post.post_id %}selected{% endif %}>
+                                    Post {{ post.id }} - {{ post.created_time.strftime('%Y-%m-%d') }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0">Batch Response Generation</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('batch_generate_responses') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-1"></i>
+                Select comments below and click "Generate Responses" to create AI responses for multiple comments at once.
+            </div>
+            
+            <button type="submit" class="btn btn-primary" id="batchGenerateBtn" disabled>
+                <i class="fas fa-robot me-1"></i> Generate Responses for Selected Comments
+            </button>
+        </form>
+    </div>
+</div>
+
+                    
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                    </div>
+                </form>
+
+                {% if comments %}
+                    <div class="mb-3">
+                        Showing {{ (pagination.page - 1) * pagination.per_page + 1 }} to 
+                        {{ pagination.min}} of 
+                        {{ pagination.total }} comments
+                    </div>
+                    
+                    {% for comment in comments %}
+                        <div class="comment">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <strong>{{ comment.user_name }}</strong>
+                                    <span class="sentiment-{{ comment.sentiment_category }} ms-2">
+                                        ({{ comment.sentiment_category }}, {{ comment.sentiment_score|round(2) }})
+                                    </span>
+                                </div>
+                                <small class="text-muted">{{ comment.created_time.strftime('%Y-%m-%d %H:%M') }}</small>
+                            </div>
+                            
+                            <p class="mb-2">{{ comment.message }}</p>
+                            <!-- Add this after the comment message in both templates -->
+<div class="comment-actions mt-2">
+    <button class="btn btn-sm btn-outline-primary me-2" type="button" 
+            data-bs-toggle="collapse" data-bs-target="#replyForm-{{ comment.comment_id }}" 
+            aria-expanded="false" aria-controls="replyForm-{{ comment.comment_id }}">
+        <i class="fas fa-reply me-1"></i> Reply
+    </button>
+    
+    <!-- View Replies Button (only show if there are replies) -->
+    {% if comment.replies %}
+    <button class="btn btn-sm btn-outline-secondary view-replies-btn" 
+            type="button" data-comment-id="{{ comment.comment_id }}">
+        <i class="fas fa-comments me-1"></i> 
+        View Replies ({{ comment.replies|length }})
+    </button>
+    {% endif %}
+</div>
+
+<!-- Reply Form -->
+<div class="collapse mt-2" id="replyForm-{{ comment.comment_id }}">
+    <form method="POST" action="{{ url_for('reply_to_comment', comment_id=comment.comment_id) }}" 
+          class="reply-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="input-group">
+            <textarea name="message" class="form-control" placeholder="Write a reply..." 
+                      rows="2" required></textarea>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Replies Container -->
+<div id="replies-{{ comment.comment_id }}" class="replies-container mt-2" style="display: none;">
+    <div class="replies-list"></div>
+</div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    Post: <a href="{{ url_for('post_analysis', post_id=comment.post_id) }}" class="facebook-link">{{ comment.post_id }}</a>
+                                </small>
+                                <a href="{{ url_for('get_post_facebook_url', post_id=comment.post_id) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                    <i class="fab fa-facebook me-1"></i> View Post
+                                </a>
+                                
+                            </div>
+                        </div>
+                    {% endfor %}
+                    
+                    <!-- Pagination -->
+                    <nav aria-label="Comments pagination" class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            {% if pagination.has_prev %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ url_for('comments', page=pagination.prev_num, sentiment=sentiment_filter, search=search_query, post=posts_filter) }}">
+                                        Previous
+                                    </a>
+                                </li>
+                            {% endif %}
+                            
+                            {% for page_num in pagination.iter_pages() %}
+                                {% if page_num %}
+                                    <li class="page-item {% if page_num == pagination.page %}active{% endif %}">
+                                        <a class="page-link" href="{{ url_for('comments', page=page_num, sentiment=sentiment_filter, search=search_query, post=posts_filter) }}">
+                                            {{ page_num }}
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link">...</span>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            {% if pagination.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="{{ url_for('comments', page=pagination.next_num, sentiment=sentiment_filter, search=search_query, post=posts_filter) }}">
+                                        Next
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fas fa-comment-slash fa-3x text-muted mb-3"></i>
+                        <h4>No comments found</h4>
+                        <p class="text-muted">Try adjusting your filters or fetch more data</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

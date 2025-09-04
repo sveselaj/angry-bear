@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+
+{% block title %}Auto-Reply Settings - Facebook Analytics{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Automated Comment Responses</h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <h5><i class="fas fa-robot me-2"></i> AI-Powered Responses</h5>
+                    <p class="mb-0">
+                        This feature uses ChatGPT to automatically generate responses to comments
+                        based on their content and sentiment.
+                    </p>
+                </div>
+                
+                <form method="POST" action="{{ url_for('auto_reply_settings') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    
+                    <div class="mb-3 form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="enabled" name="enabled" 
+                               {% if settings.enabled %}checked{% endif %}>
+                        <label class="form-check-label" for="enabled">Enable Auto-Reply</label>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="response_template" class="form-label">Default Response Template</label>
+                        <textarea class="form-control" id="response_template" name="response_template" 
+                                  rows="3" placeholder="Optional template for responses">{{ settings.response_template }}</textarea>
+                        <div class="form-text">
+                            This template will be used as a base for all AI-generated responses.
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="min_confidence" class="form-label">Minimum Confidence</label>
+                                <input type="number" class="form-control" id="min_confidence" name="min_confidence" 
+                                       min="0" max="1" step="0.1" value="{{ settings.min_confidence }}">
+                                <div class="form-text">
+                                    Only reply when confidence is above this threshold (0.0 to 1.0).
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="max_daily_replies" class="form-label">Max Daily Replies</label>
+                                <input type="number" class="form-control" id="max_daily_replies" name="max_daily_replies" 
+                                       min="1" max="1000" value="{{ settings.max_daily_replies }}">
+                                <div class="form-text">
+                                    Maximum number of auto-replies per day.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="excluded_keywords" class="form-label">Excluded Keywords</label>
+                        <input type="text" class="form-control" id="excluded_keywords" name="excluded_keywords" 
+                               value="{{ excluded_keywords }}" placeholder="spam, advertisement, promo">
+                        <div class="form-text">
+                            Comma-separated list of keywords. Comments containing these will be ignored.
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Reply To:</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="reply_to_negative" name="reply_to_negative" 
+                                   {% if settings.reply_to_negative %}checked{% endif %}>
+                            <label class="form-check-label" for="reply_to_negative">Negative Comments</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="reply_to_questions" name="reply_to_questions" 
+                                   {% if settings.reply_to_questions %}checked{% endif %}>
+                            <label class="form-check-label" for="reply_to_questions">Questions</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="reply_to_compliments" name="reply_to_compliments" 
+                                   {% if settings.reply_to_compliments %}checked{% endif %}>
+                            <label class="form-check-label" for="reply_to_compliments">Compliments</label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-1"></i> Save Settings
+                    </button>
+                </form>
+                
+                <hr>
+                
+                <h5>Process Comments</h5>
+                <form method="POST" action="{{ url_for('auto_reply_process') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    
+                    <div class="mb-3">
+                        <label for="limit" class="form-label">Number of comments to process</label>
+                        <select class="form-select" id="limit" name="limit">
+                            <option value="5">5 comments</option>
+                            <option value="10" selected>10 comments</option>
+                            <option value="20">20 comments</option>
+                            <option value="50">50 comments</option>
+                        </select>
+                        <div class="form-text">
+                            Select how many of the most recent unanswered comments to process.
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-play me-1"></i> Process Comments
+                    </button>
+                </form>
+                
+                <hr>
+                
+                <h5>How it works:</h5>
+                <ol>
+                    <li>The system finds recent comments without replies</li>
+                    <li>Each comment is analyzed for sentiment and content</li>
+                    <li>ChatGPT generates an appropriate response based on your settings</li>
+                    <li>Responses are posted to Facebook</li>
+                    <li>All responses are saved in your database</li>
+                </ol>
+                
+                <div class="alert alert-warning">
+                    <h6><i class="fas fa-exclamation-triangle me-1"></i> Important</h6>
+                    <p class="mb-0">
+                        Always review AI-generated responses before posting them. 
+                        While ChatGPT is powerful, it may occasionally generate inappropriate
+                        or off-topic responses.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Test Response Generation</h5>
+            </div>
+            <div class="card-body">
+                <form id="testResponseForm">
+                    <div class="mb-3">
+                        <label for="testComment" class="form-label">Test Comment</label>
+                        <textarea class="form-control" id="testComment" rows="3" 
+                                  placeholder="Enter a comment to test response generation"></textarea>
+                    </div>
+                    <button type="button" id="testGenerateBtn" class="btn btn-outline-primary">
+                        <i class="fas fa-wand-magic-sparkles me-1"></i> Generate Response
+                    </button>
+                </form>
+                
+                <div id="testResult" class="mt-3" style="display: none;">
+                    <h6>Generated Response:</h6>
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <p id="generatedResponse" class="mb-0"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h5 class="mb-0">Statistics</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <span>Total AI Replies:</span>
+                    <strong>{{ total_ai_replies }}</strong>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <span>Today's Replies:</span>
+                    <strong>{{ todays_ai_replies }}</strong>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <span>Pending Comments:</span>
+                    <strong>{{ pending_comments }}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const testForm = document.getElementById('testResponseForm');
+    const testGenerateBtn = document.getElementById('testGenerateBtn');
+    const testResult = document.getElementById('testResult');
+    const generatedResponse = document.getElementById('generatedResponse');
+    
+    testGenerateBtn.addEventListener('click', function() {
+        const comment = document.getElementById('testComment').value.trim();
+        
+        if (!comment) {
+            alert('Please enter a comment to test');
+            return;
+        }
+        
+        // Show loading
+        testGenerateBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Generating...';
+        testGenerateBtn.disabled = true;
+        
+        // Call API
+        fetch('{{ url_for("api_auto_reply_generate") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ comment: comment })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.response) {
+                generatedResponse.textContent = data.response;
+                testResult.style.display = 'block';
+            } else {
+                alert('Error: ' + (data.error || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            alert('Error: ' + error);
+        })
+        .finally(() => {
+            testGenerateBtn.innerHTML = '<i class="fas fa-wand-magic-sparkles me-1"></i> Generate Response';
+            testGenerateBtn.disabled = false;
+        });
+    });
+});
+</script>
+{% endblock %}

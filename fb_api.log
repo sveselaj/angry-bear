@@ -1,0 +1,4 @@
+2025-09-04 16:35:53,937 ERROR: Error fetching conversations: {'error': {'message': '(#200) Requires permission: pages_messaging or User associated with the Page access token does not have an appropriate role on the Page.', 'type': 'OAuthException', 'code': 200, 'fbtrace_id': 'AKpgLQF1nqbmAQ2n595xGBv'}} [in /Users/shkelqimveselaj/angry-bear/fb_api.py:1118]
+2025-09-04 16:35:53,938 INFO: Fetched 0 conversations with 0 total messages [in /Users/shkelqimveselaj/angry-bear/fb_api.py:1175]
+2025-09-04 16:36:01,003 ERROR: Error fetching conversations: {'error': {'message': '(#200) Requires permission: pages_messaging or User associated with the Page access token does not have an appropriate role on the Page.', 'type': 'OAuthException', 'code': 200, 'fbtrace_id': 'As5YElAR-SJ2Tqn3LT_OYiX'}} [in /Users/shkelqimveselaj/angry-bear/fb_api.py:1118]
+2025-09-04 16:36:01,004 INFO: Fetched 0 conversations with 0 total messages [in /Users/shkelqimveselaj/angry-bear/fb_api.py:1175]

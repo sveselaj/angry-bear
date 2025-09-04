@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}OpenAI API Usage - Facebook Analytics{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">OpenAI API Usage Statistics</h4>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ total_requests }}</h5>
+                                <p class="card-text">Total Requests</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ successful_requests }}</h5>
+                                <p class="card-text">Successful</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-danger text-white">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ failed_requests }}</h5>
+                                <p class="card-text">Failed</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">{{ total_tokens }}</h5>
+                                <p class="card-text">Total Tokens</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert alert-warning">
+                    <h5>Estimated Cost: ${{ "%.4f"|format(estimated_cost) }}</h5>
+                    <p class="mb-0">Based on GPT-3.5-turbo pricing of $0.002 per 1K tokens</p>
+                </div>
+                
+                <h5>Recent API Requests</h5>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Endpoint</th>
+                                <th>Model</th>
+                                <th>Tokens</th>
+                                <th>Time (s)</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in recent_logs %}
+                            <tr>
+                                <td>{{ log.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>{{ log.endpoint }}</td>
+                                <td>{{ log.model }}</td>
+                                <td>{{ log.tokens_used }}</td>
+                                <td>{{ "%.2f"|format(log.processing_time) }}</td>
+                                <td>
+                                    {% if log.success %}
+                                    <span class="badge bg-success">Success</span>
+                                    {% else %}
+                                    <span class="badge bg-danger">Failed</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

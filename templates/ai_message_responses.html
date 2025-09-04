@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}AI Message Responses - Facebook Analytics{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">AI-Generated Message Responses</h4>
+            </div>
+            <div class="card-body">
+                {% if responses %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Original Message</th>
+                                <th>AI Response</th>
+                                <th>Tokens</th>
+                                <th>Time (s)</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for response in responses %}
+                            <tr>
+                                <td>{{ response.generated_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>
+                                    <div class="text-muted small">
+                                        {{ response.message.message_text[:100] }}{% if response.message.message_text|length > 100 %}...{% endif %}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="response-preview">
+                                        {{ response.response_text[:100] }}{% if response.response_text|length > 100 %}...{% endif %}
+                                    </div>
+                                </td>
+                                <td>{{ response.tokens_used }}</td>
+                                <td>{{ "%.2f"|format(response.processing_time) }}</td>
+                                <td>
+                                    {% if response.sent_at %}
+                                    <span class="badge bg-success">Sent</span>
+                                    {% else %}
+                                    <span class="badge bg-warning">Not Sent</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-robot fa-3x text-muted mb-3"></i>
+                    <h4>No AI responses yet</h4>
+                    <p class="text-muted">AI-generated message responses will appear here</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

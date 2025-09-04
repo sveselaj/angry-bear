@@ -1,0 +1,42 @@
+2025-09-01 01:05:30,053 - comment_evaluator - INFO - Starting OpenAI API request for comment: Mir pov dokan kojshia pej Ballkoni aka lift a duhe... [comment_evaluator.py:68]
+2025-09-01 01:05:31,167 - comment_evaluator - INFO - OpenAI API request completed in 1.11s, Tokens: 421 [comment_evaluator.py:110]
+2025-09-01 01:08:40,593 - comment_evaluator - INFO - Starting OpenAI API request for comment: Mir pov dokan kojshia pej Ballkoni aka lift a duhe... [comment_evaluator.py:68]
+2025-09-01 01:08:42,307 - comment_evaluator - INFO - OpenAI API request completed in 1.71s, Tokens: 412 [comment_evaluator.py:110]
+2025-09-01 01:10:23,171 - comment_evaluator - INFO - Starting OpenAI API request for comment: Mir pov dokan kojshia pej Ballkoni aka lift a duhet mi ngje shkallt dej nalt😂😂... [comment_evaluator.py:68]
+2025-09-01 01:10:23,172 - comment_evaluator - INFO - Post context: Shitet banesë në rrugën Muharrem Fejza, Prishtinë
+
+Banesa ka sipërfaqe prej 90m² dhe përbëhet nga:
+ ... [comment_evaluator.py:71]
+2025-09-01 01:10:24,331 - comment_evaluator - INFO - OpenAI API request completed in 1.16s, Tokens: 418 [comment_evaluator.py:111]
+2025-09-01 01:11:09,532 - comment_evaluator - INFO - Starting OpenAI API request for comment: Mir pov dokan kojshia pej Ballkoni aka lift a duhet mi ngje shkallt dej nalt😂😂... [comment_evaluator.py:68]
+2025-09-01 01:11:09,533 - comment_evaluator - INFO - Post context: Shitet banesë në rrugën Muharrem Fejza, Prishtinë
+
+Banesa ka sipërfaqe prej 90m² dhe përbëhet nga:
+ ... [comment_evaluator.py:71]
+2025-09-01 01:11:09,533 - comment_evaluator - INFO - User Prompt: Comment to evaluate: Mir pov dokan kojshia pej Ballkoni aka lift a duhet mi ngje shkallt dej nalt😂😂
+Post context: Shitet banesë në rrugën Muharrem Fejza, Prishtinë
+
+Banesa ka sipërfaqe prej 90m² dhe përbëhet nga:
+ • Qëndrimi ditor me kuzhinë
+ • Dhoma e prindërve me garderobë
+ • Dhoma e fëmijëve
+ • Banjo
+ • Terrasë
+
+Çmimi: 1000€ për m²
+Të interesuarit mund të kontaktojnë në numrin: +383 48 373 737... [comment_evaluator.py:86]
+2025-09-01 01:11:11,436 - comment_evaluator - INFO - OpenAI API request completed in 1.90s, Tokens: 433 [comment_evaluator.py:112]
+2025-09-01 01:12:36,729 - comment_evaluator - INFO - Starting OpenAI API request for comment: Kur kryhen banesat... [comment_evaluator.py:68]
+2025-09-01 01:12:37,862 - comment_evaluator - INFO - OpenAI API request completed in 1.13s, Tokens: 331 [comment_evaluator.py:112]
+2025-09-01 01:13:00,588 - comment_evaluator - INFO - Starting OpenAI API request for comment: Kur kryhen banesat... [comment_evaluator.py:68]
+2025-09-01 01:13:02,125 - comment_evaluator - INFO - OpenAI API request completed in 1.54s, Tokens: 323 [comment_evaluator.py:112]
+2025-09-01 01:48:34,422 - comment_evaluator - INFO - Starting OpenAI API request for comment: Mir pov dokan kojshia pej Ballkoni aka lift a duhet mi ngje shkallt dej nalt😂😂... [comment_evaluator.py:68]
+2025-09-01 01:48:35,701 - comment_evaluator - INFO - OpenAI API request completed in 1.28s, Tokens: 420 [comment_evaluator.py:112]
+2025-09-01 01:48:55,764 - comment_evaluator - INFO - Starting OpenAI API request for comment: Ndertimi i vjeter edhe jo i mire ka banesa ma te mira per kete qmim 👌... [comment_evaluator.py:68]
+2025-09-01 01:48:57,301 - comment_evaluator - INFO - OpenAI API request completed in 1.54s, Tokens: 428 [comment_evaluator.py:112]
+2025-09-01 01:48:57,310 - app - INFO - Batch response generation completed: 1 successes, 0 errors [app.py:1517]
+2025-09-01 01:49:18,571 - app - INFO - Batch response generation completed: 0 successes, 0 errors [app.py:1517]
+2025-09-01 01:49:34,866 - comment_evaluator - INFO - Starting OpenAI API request for comment: Kur kryhen banesat... [comment_evaluator.py:68]
+2025-09-01 01:49:35,828 - comment_evaluator - INFO - OpenAI API request completed in 0.96s, Tokens: 331 [comment_evaluator.py:112]
+2025-09-01 21:34:42,279 - comment_evaluator - INFO - Starting OpenAI API request for comment: Mir pov dokan kojshia pej Ballkoni aka lift a duhet mi ngje shkallt dej nalt😂😂... [comment_evaluator.py:68]
+2025-09-01 21:34:44,109 - comment_evaluator - INFO - OpenAI API request completed in 1.83s, Tokens: 430 [comment_evaluator.py:112]

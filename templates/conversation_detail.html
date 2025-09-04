@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block title %}Conversation - Facebook Analytics{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Conversation Details</h4>
+                <div>
+                    <a href="{{ url_for('messages') }}" class="btn btn-sm btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-1"></i> Back to Conversations
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Conversation Info -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6>Participants</h6>
+                        <p>
+                            {% if conversation.participants %}
+                                {% for participant in conversation.participants %}
+                                    <span class="badge bg-primary me-1">{{ participant.name }}</span>
+                                {% endfor %}
+                            {% else %}
+                                <span class="text-muted">Unknown</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="col-md-3">
+                        <h6>Last Updated</h6>
+                        <p class="text-muted">{{ conversation.updated_time.strftime('%Y-%m-%d %H:%M') }}</p>
+                    </div>
+                    <div class="col-md-3">
+                        <h6>Message Count</h6>
+                        <p><span class="badge bg-info">{{ conversation.message_count }}</span></p>
+                    </div>
+                </div>
+
+                <!-- Messages -->
+                <h5>Messages</h5>
+                {% if messages %}
+                <div class="message-thread">
+                    {% for message in messages %}
+                    <div class="message {% if message.sender_id == page_id %}message-sent{% else %}message-received{% endif %} mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <strong>
+                                        {% if message.sender_id == page_id %}
+                                            {{ message.sender_name or 'You' }}
+                                        {% else %}
+                                            {{ message.sender_name or 'Customer' }}
+                                        {% endif %}
+                                        {% if message.is_ai_generated %}
+                                            <span class="badge bg-info ms-2">AI</span>
+                                        {% endif %}
+                                    </strong>
+                                    <small class="text-muted">{{ message.created_time.strftime('%Y-%m-%d %H:%M') }}</small>
+                                </div>
+                                <p class="mb-0">{{ message.message_text }}</p>
+                                {% if message.has_attachments %}
+                                <div class="mt-2">
+                                    <span class="badge bg-warning">
+                                        <i class="fas fa-paperclip me-1"></i> Has Attachments
+                                    </span>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-comment-slash fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">No messages found in this conversation</p>
+                </div>
+                {% endif %}
+
+                <!-- Reply Form -->
+                {% if conversation.can_reply %}
+                <div class="mt-4">
+                    <h5>Send Reply</h5>
+                    <form method="POST" action="{{ url_for('reply_to_message') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <input type="hidden" name="conversation_id" value="{{ conversation.conversation_id }}">
+                        <div class="mb-3">
+                            <textarea class="form-control" name="message_text" rows="3" placeholder="Type your message here..." required></textarea>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-1"></i> Send Message
+                            </button>
+                            <button type="button" class="btn btn-outline-info" id="generateAiResponse">
+                                <i class="fas fa-robot me-1"></i> Generate AI Response
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // AI Response Generation
+    const generateAiBtn = document.getElementById('generateAiResponse');
+    const messageTextarea = document.querySelector('textarea[name="message_text"]');
+    
+    if (generateAiBtn && messageTextarea) {
+        generateAiBtn.addEventListener('click', function() {
+            // Get the last message from the customer
+            const customerMessages = document.querySelectorAll('.message-received');
+            let lastCustomerMessage = '';
+            
+            if (customerMessages.length > 0) {
+                const lastMessage = customerMessages[customerMessages.length - 1];
+                lastCustomerMessage = lastMessage.querySelector('p').textContent;
+            }
+            
+            if (!lastCustomerMessage) {
+                alert('No customer messages found to generate a response from.');
+                return;
+            }
+            
+            // Show loading
+            generateAiBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Generating...';
+            generateAiBtn.disabled = true;
+            
+            // Call API to generate response
+            fetch('{{ url_for("api_auto_reply_generate") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    comment: lastCustomerMessage,
+                    is_message: true
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.response) {
+                    messageTextarea.value = data.response;
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to generate response'));
+                }
+            })
+            .catch(error => {
+                alert('Error: ' + error);
+            })
+            .finally(() => {
+                generateAiBtn.innerHTML = '<i class="fas fa-robot me-1"></i> Generate AI Response';
+                generateAiBtn.disabled = false;
+            });
+        });
+    }
+});
+</script>
+{% endblock %}

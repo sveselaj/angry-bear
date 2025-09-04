@@ -1,0 +1,24 @@
+.facebook-link {
+    color: #3b5998; /* Facebook blue */
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.facebook-link:hover {
+    text-decoration: underline;
+}
+
+.facebook-icon {
+    width: 16px;
+    height: 16px;
+    /* You can use an actual Facebook icon image or SVG here */
+    background: #3b5998;
+    border-radius: 2px;
+    color: white;
+    text-align: center;
+    line-height: 16px;
+    font-size: 12px;
+    font-weight: bold;
+}

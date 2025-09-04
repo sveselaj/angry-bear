@@ -1,0 +1,108 @@
+2025-08-30 19:56:13,170 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:621]
+2025-08-30 19:56:14,067 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:621]
+2025-08-30 20:04:43,365 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 20:05:29,962 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:618]
+2025-08-30 20:05:43,156 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:618]
+2025-08-30 20:05:52,323 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:619]
+2025-08-30 20:14:50,825 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:619]
+2025-08-30 20:15:22,208 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:619]
+2025-08-30 20:15:46,778 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:619]
+2025-08-30 20:25:28,134 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:619]
+2025-08-30 20:25:29,052 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:619]
+2025-08-30 21:09:05,634 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:619]
+2025-08-30 21:09:45,246 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:619]
+2025-08-30 21:12:39,085 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 21:12:40,152 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 21:26:03,210 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 21:26:04,262 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 21:26:39,966 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 21:27:59,276 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 21:28:07,654 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 21:28:14,532 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 21:28:15,620 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 21:29:07,370 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 21:29:08,355 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 21:56:16,706 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 21:56:24,695 ERROR: Exception on / [GET] [in /opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/app.py:875]
+Traceback (most recent call last):
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/shkelqimveselaj/angry-bear/app.py", line 833, in index
+    return render_template('index.html')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/jinja2/environment.py", line 1295, in render
+    self.environment.handle_exception()
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/jinja2/environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/Users/shkelqimveselaj/angry-bear/templates/index.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "/Users/shkelqimveselaj/angry-bear/templates/base.html", line 144, in top-level template code
+    <a class="nav-link {% if request.endpoint == 'analytics' %}active{% endif %}" href="{{ url_for('analytics') }}">
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/app.py", line 1121, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/app.py", line 1110, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/werkzeug/routing/map.py", line 924, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'analytics'. Did you mean 'static' instead?
+2025-08-30 21:56:25,733 ERROR: Exception on / [GET] [in /opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/app.py:875]
+Traceback (most recent call last):
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/shkelqimveselaj/angry-bear/app.py", line 833, in index
+    return render_template('index.html')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/jinja2/environment.py", line 1295, in render
+    self.environment.handle_exception()
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/jinja2/environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/Users/shkelqimveselaj/angry-bear/templates/index.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "/Users/shkelqimveselaj/angry-bear/templates/base.html", line 144, in top-level template code
+    <a class="nav-link {% if request.endpoint == 'analytics' %}active{% endif %}" href="{{ url_for('analytics') }}">
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/app.py", line 1121, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/app.py", line 1110, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/werkzeug/routing/map.py", line 924, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'analytics'. Did you mean 'static' instead?
+2025-08-30 21:56:40,999 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]

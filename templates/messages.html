@@ -1,25 +1,137 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Page Messages</title>
-    <style>
-        .conversation { border: 1px solid #ddd; padding: 15px; margin: 10px 0; }
-        .message { background: #f9f9f9; padding: 10px; margin: 5px 0; }
-        .user-message { background: #e3f2fd; }
-        .page-message { background: #f5f5f5; }
-    </style>
-</head>
-<body>
-    <h1>Page Conversations</h1>
-    {% for conversation in conversations %}
-        <div class="conversation">
-            <h3><a href="{{ url_for('conversation_detail', conversation_id=conversation.conversation_id) }}">
-                Conversation {{ conversation.conversation_id }}
-            </a></h3>
-            <p>Last updated: {{ conversation.updated_time }}</p>
-            <p>Messages: {{ conversation.message_count }}</p>
-            <p>Snippet: {{ conversation.snippet }}</p>
+{% extends "base.html" %}
+
+{% block title %}Messages - Facebook Analytics{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Message Conversations</h4>
+                <div>
+                    <a href="{{ url_for('fetch_messages') }}" class="btn btn-primary" 
+                       onclick="showLoading('Fetching messages from Facebook...')">
+                        <i class="fas fa-sync-alt me-1"></i> Fetch Messages
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if conversations %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Participants</th>
+                                <th>Last Message</th>
+                                <th>Updated</th>
+                                <th>Messages</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for conversation in conversations %}
+                            <tr>
+                                <td>
+                                    {% if conversation.participants %}
+                                        {% for participant in conversation.participants %}
+                                            <span class="badge bg-secondary me-1">{{ participant.name }}</span>
+                                        {% endfor %}
+                                    {% else %}
+                                        <span class="text-muted">Unknown</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="message-snippet">
+                                        {{ conversation.snippet }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <small class="text-muted">{{ conversation.updated_time.strftime('%Y-%m-%d %H:%M') }}</small>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">{{ conversation.message_count }}</span>
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('conversation_detail', conversation_id=conversation.conversation_id) }}" 
+                                       class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye me-1"></i> View
+                                    </a>
+                                    {% if conversation.can_reply %}
+                                    <button class="btn btn-sm btn-outline-success" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target="#replyModal"
+                                            data-conversation-id="{{ conversation.conversation_id }}">
+                                        <i class="fas fa-reply me-1"></i> Reply
+                                    </button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-comments fa-3x text-muted mb-3"></i>
+                    <h4>No conversations found</h4>
+                    <p class="text-muted">Click "Fetch Messages" to load conversations from Facebook</p>
+                    <a href="{{ url_for('fetch_messages') }}" class="btn btn-primary">
+                        <i class="fas fa-sync-alt me-1"></i> Fetch Messages
+                    </a>
+                </div>
+                {% endif %}
+            </div>
         </div>
-    {% endfor %}
-</body>
-</html>
+    </div>
+</div>
+
+<!-- Reply Modal -->
+<div class="modal fade" id="replyModal" tabindex="-1" aria-labelledby="replyModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="replyModalLabel">Send Message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{{ url_for('reply_to_message') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <input type="hidden" id="modalConversationId" name="conversation_id" value="">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="messageText" class="form-label">Message</label>
+                        <textarea class="form-control" id="messageText" name="message_text" rows="4" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle reply modal
+    const replyModal = document.getElementById('replyModal');
+    if (replyModal) {
+        replyModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const conversationId = button.getAttribute('data-conversation-id');
+            const modalConversationId = document.getElementById('modalConversationId');
+            modalConversationId.value = conversationId;
+        });
+    }
+    
+    // Auto-refresh conversations every 5 minutes
+    setInterval(function() {
+        if (document.visibilityState === 'visible') {
+            window.location.reload();
+        }
+    }, 300000); // 5 minutes
+});
+</script>
+{% endblock %}

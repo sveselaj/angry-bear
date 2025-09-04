@@ -1,0 +1,105 @@
+2025-08-30 21:59:40,469 ERROR: Exception on / [GET] [in /opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/app.py:875]
+Traceback (most recent call last):
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/shkelqimveselaj/angry-bear/app.py", line 833, in index
+    return render_template('index.html')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/jinja2/environment.py", line 1295, in render
+    self.environment.handle_exception()
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/jinja2/environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/Users/shkelqimveselaj/angry-bear/templates/index.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "/Users/shkelqimveselaj/angry-bear/templates/base.html", line 144, in top-level template code
+    <a class="nav-link {% if request.endpoint == 'analytics' %}active{% endif %}" href="{{ url_for('analytics') }}">
+    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/app.py", line 1121, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/flask/app.py", line 1110, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Caskroom/miniforge/base/envs/ml-env/lib/python3.12/site-packages/werkzeug/routing/map.py", line 924, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'analytics'. Did you mean 'static' instead?
+2025-08-30 22:01:50,890 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 22:01:51,791 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 22:03:19,876 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 22:05:04,839 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 22:05:05,740 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 22:06:33,447 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 22:06:34,357 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 22:07:56,374 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 22:09:03,212 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 22:09:04,154 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 22:10:49,494 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 22:11:43,202 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 22:17:09,301 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 22:31:31,193 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-30 22:31:32,273 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-31 22:30:55,956 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-31 22:30:58,407 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-31 22:33:17,763 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-31 22:33:37,216 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-31 22:33:56,201 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-31 22:34:00,598 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-31 22:41:53,130 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-31 22:41:56,489 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-31 22:42:40,622 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-31 22:46:32,881 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-31 22:46:41,512 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-31 22:58:17,148 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-31 22:58:20,938 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-31 23:29:02,846 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-31 23:30:47,734 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-31 23:33:08,656 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-31 23:40:15,521 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-31 23:41:17,776 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-31 23:42:17,411 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-31 23:43:04,110 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-31 23:43:05,484 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-08-31 23:58:13,366 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-09-01 00:09:36,872 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-09-01 00:09:40,267 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-09-01 00:20:30,674 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-09-01 00:20:32,174 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-09-01 00:31:08,849 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-09-01 00:33:00,138 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-09-01 00:33:03,518 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-09-01 00:39:03,116 WARNING: No comment_ids found in form data [in /Users/shkelqimveselaj/angry-bear/app.py:1457]
+2025-09-01 00:39:17,136 WARNING: No comment_ids found in form data [in /Users/shkelqimveselaj/angry-bear/app.py:1457]
+2025-09-01 00:39:57,715 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-09-01 00:40:07,480 INFO: Batch response generation completed: 1 successes, 0 errors [in /Users/shkelqimveselaj/angry-bear/app.py:1515]
+2025-09-01 00:46:50,156 INFO: Batch response generation completed: 1 successes, 0 errors [in /Users/shkelqimveselaj/angry-bear/app.py:1515]
+2025-09-01 00:51:26,951 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-09-01 00:55:44,791 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-09-01 00:57:11,534 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-09-01 00:57:34,405 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-09-01 00:58:36,795 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-09-01 00:58:42,376 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-09-01 01:00:16,258 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-09-01 01:04:15,671 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-09-01 01:04:17,068 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-09-01 01:05:16,472 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-09-01 01:08:28,651 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-09-01 01:09:27,983 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-09-01 01:10:13,116 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-09-01 01:10:18,887 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]
+2025-09-01 01:11:04,068 INFO: Facebook Analytics startup [in /Users/shkelqimveselaj/angry-bear/app.py:620]

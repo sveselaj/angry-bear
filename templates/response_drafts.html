@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Response Drafts - Facebook Analytics{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Response Drafts</h4>
+                <div class="btn-group">
+                    <a href="{{ url_for('comments') }}?filter=unanswered" class="btn btn-sm btn-outline-primary">
+                        <i class="fas fa-comments me-1"></i> View Unanswered Comments
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Filter Tabs -->
+                <ul class="nav nav-tabs mb-4">
+                    <li class="nav-item">
+                        <a class="nav-link {% if status_filter == 'all' %}active{% endif %}" 
+                           href="{{ url_for('response_drafts', status='all') }}">
+                            All Drafts
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if status_filter == 'pending' %}active{% endif %}" 
+                           href="{{ url_for('response_drafts', status='pending') }}">
+                            Pending
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if status_filter == 'posted' %}active{% endif %}" 
+                           href="{{ url_for('response_drafts', status='posted') }}">
+                            Posted
+                        </a>
+                    </li>
+                </ul>
+
+                {% if drafts %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Comment</th>
+                                <th>Generated Response</th>
+                                <th>Generated</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for draft in drafts %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-start">
+                                        <div class="me-2">
+                                            <i class="fas fa-comment text-muted"></i>
+                                        </div>
+                                        <div>
+                                            <strong>{{ draft.comment.user_name }}</strong>
+                                            <div class="text-muted small">
+                                                {{ draft.comment.message[:100] }}{% if draft.comment.message|length > 100 %}...{% endif %}
+                                            </div>
+                                            <a href="{{ url_for('comment_detail', comment_id=draft.comment_id) }}" class="small">
+                                                View Comment
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="response-preview">
+                                        {{ draft.message[:150] }}{% if draft.message|length > 150 %}...{% endif %}
+                                    </div>
+                                </td>
+                                <td>
+                                    <small class="text-muted">{{ draft.generated_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                                </td>
+                                <td>
+                                    {% if draft.posted %}
+                                    <span class="badge bg-success">Posted</span>
+                                    <small class="text-muted d-block">{{ draft.posted_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                                    {% else %}
+                                    <span class="badge bg-warning">Pending</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        {% if not draft.posted %}
+                                        <a href="{{ url_for('post_draft', draft_id=draft.id) }}" class="btn btn-success" title="Post to Facebook">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </a>
+                                        <a href="{{ url_for('edit_draft', draft_id=draft.id) }}" class="btn btn-primary" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        {% endif %}
+                                        <a href="{{ url_for('delete_draft', draft_id=draft.id) }}" class="btn btn-danger" title="Delete" onclick="return confirm('Are you sure you want to delete this draft?')">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                {% if total > per_page %}
+                <nav aria-label="Draft pagination">
+                    <ul class="pagination justify-content-center">
+                        {% for p in range(1, (total // per_page) + 2) %}
+                        <li class="page-item {% if p == page %}active{% endif %}">
+                            <a class="page-link" href="{{ url_for('response_drafts', status=status_filter, page=p) }}">{{ p }}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+                {% endif %}
+
+                {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">No response drafts found</p>
+                    <a href="{{ url_for('comments') }}?filter=unanswered" class="btn btn-primary">
+                        <i class="fas fa-comments me-1"></i> Generate Responses
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
